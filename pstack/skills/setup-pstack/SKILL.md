@@ -59,6 +59,17 @@ Add `# fallback: claude-opus-4-8-thinking-high` on judgment roles; J3 E3 uses `c
 
 Tell the user the rule was written and that it applies to new sessions. Re-running this skill updates it.
 
+## Per-runtime siblings
+
+This skill configures the Cursor rule only. The same role labels ship as per-runtime projections of the `dispatch-rubric-v2.md` role matrix (see its "pstack role crosswalk"), installed by `~/.ai/setup.sh`:
+
+- `~/.ai/rules/pstack-models-cc.md` — Claude Code, always-on via `~/.claude/rules/` (models `sonnet`/`opus`/`fable`; effort via `cc-agent-*` bins)
+- `~/.ai/rules/pstack-models-codex.md` — Codex, managed marker block in `~/.codex/AGENTS.md` (gpt-5.6-sol, roles differ by reasoning effort)
+- `~/.ai/rules/pstack-models-relays.md` — on-demand, kokoro-mode "with relays" override (cross-provider relay seats)
+- `~/.ai/cursor/pstack-models.mdc` — the tracked template behind `~/.cursor/rules/pstack-models.mdc`
+
+**Write-back rule:** `setup.sh` regenerates `~/.cursor/rules/pstack-models.mdc` from the `~/.ai` template on every run. After step 5, copy the written rule back to `~/.ai/cursor/pstack-models.mdc` (when that repo exists on the machine) — otherwise the next `setup.sh` run reverts your choices. When a change reflects a policy shift rather than slug availability, update the matrix and the sibling tables together.
+
 ### 7. Offer a verification skill (optional)
 
 Check whether the project has a way to drive the real app for proof (a `verify-*` skill, or an existing harness). If not, offer once: "want a project-local verification skill, so agents can drive the app the way a user does and prove changes work? I can generate one with /create-verification-skill." On yes, invoke `/create-verification-skill` (resolves wherever pstack is installed — workspace, user, or plugin). On no, move on without pushing.
