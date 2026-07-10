@@ -19,7 +19,7 @@ The default role-to-model mapping is the rule shape shown in step 5 below. If `~
 
 ### 3. Map and confirm
 
-Show every role with its current model, marking any whose model is not in the detected set as needing a choice. Ask whether to accept as-is or change specific roles, offering the detected models as the options. Prefer AskQuestion over free text. For panel roles (how critics, arena runners, architect runners, interrogate reviewers) the value is a list, and one subagent runs per model, so the list length sets the count.
+Show every role with its current model, marking any whose model is not in the detected set as needing a choice. Ask whether to accept as-is or change specific roles, offering the detected models as the options. Prefer AskQuestion over free text. For panel roles (how critics, arena runners, architect runners, interrogate reviewers) the value is a list, and one subagent runs per model, so the list length sets the count. Judge seats (arena cross-judge, eval blinded judge, figure-it-out judge) must be a different model family from the generators they score — flag same-family collisions before writing.
 
 ### 4. Validate
 
@@ -48,12 +48,15 @@ why investigators: composer-2.5-fast
 why synthesizer: claude-fable-5-medium-thinking
 reflect tooling: composer-2.5-fast
 reflect judgment, divergent, synthesizer: claude-fable-5-medium-thinking
-arena runners: claude-fable-5-medium-thinking, gpt-5.5-high-fast, composer-2.5-fast
-architect runners: claude-fable-5-medium-thinking, gpt-5.5-high-fast, composer-2.5-fast
+arena runners: gpt-5.5-high-fast, composer-2.5-fast, grok-4.5-xhigh
+architect runners: gpt-5.5-high-fast, composer-2.5-fast, grok-4.5-xhigh
+arena cross-judge, eval blinded judge: claude-fable-5-medium-thinking
 interrogate reviewers: claude-fable-5-medium-thinking, gpt-5.5-high-fast, composer-2.5-fast
+figure-it-out delegate: gpt-5.5-high-fast
+figure-it-out judge: claude-fable-5-medium-thinking
 ```
 
-Add `# fallback: claude-opus-4-8-thinking-high` on judgment roles; J3 E3 uses `claude-fable-5-low-thinking` per dispatch-rubric overlay.
+Add `# fallback: claude-opus-4-8-thinking-high` on judgment roles; J3 E3 uses `claude-fable-5-low-thinking` per dispatch-rubric overlay. Arena/architect runners exclude the judgment family so the cross-judge seat stays independent.
 
 ### 6. Confirm
 
