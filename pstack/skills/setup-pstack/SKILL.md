@@ -35,23 +35,23 @@ description: pstack per-role model choices (overrides skill defaults)
 alwaysApply: true
 ---
 # pstack model configuration. One line per role. Delete a line to fall back to the skill default.
-feature, refactoring: composer-2.5-fast
+feature, refactoring: composer-2.5
 bug-fix: gpt-5.5-high-fast
 perf-issue: gpt-5.5-high-fast
 hillclimb: gpt-5.5-high-fast
 judgment and prose: claude-fable-5-medium-thinking
 hardest tasks: claude-fable-5-thinking-max
-how explorer: composer-2.5-fast
+how explorer: composer-2.5
 how explainer: claude-fable-5-medium-thinking
-how critics: claude-fable-5-medium-thinking, gpt-5.5-high-fast, composer-2.5-fast
-why investigators: composer-2.5-fast
+how critics: claude-fable-5-medium-thinking, gpt-5.5-high-fast, composer-2.5
+why investigators: composer-2.5
 why synthesizer: claude-fable-5-medium-thinking
-reflect tooling: composer-2.5-fast
+reflect tooling: composer-2.5
 reflect judgment, divergent, synthesizer: claude-fable-5-medium-thinking
-arena runners: gpt-5.5-high-fast, composer-2.5-fast, grok-4.5-xhigh
-arena cross-judge pool: claude-fable-5-medium-thinking, gpt-5.5-high-fast, composer-2.5-fast
-architect runners: gpt-5.5-high-fast, composer-2.5-fast, grok-4.5-xhigh
-interrogate reviewers: claude-fable-5-medium-thinking, gpt-5.5-high-fast, composer-2.5-fast
+arena runners: gpt-5.5-high-fast, composer-2.5, grok-4.5-xhigh
+arena cross-judge pool: claude-fable-5-medium-thinking, gpt-5.5-high-fast, composer-2.5
+architect runners: gpt-5.5-high-fast, composer-2.5, grok-4.5-xhigh
+interrogate reviewers: claude-fable-5-medium-thinking, gpt-5.5-high-fast, composer-2.5
 figure-it-out delegate: gpt-5.5-high-fast
 figure-it-out judge: claude-fable-5-medium-thinking
 ```
