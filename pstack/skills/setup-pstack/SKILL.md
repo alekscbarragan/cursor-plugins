@@ -19,7 +19,7 @@ The default role-to-model mapping is the rule shape shown in step 5 below. If `~
 
 ### 3. Map and confirm
 
-Show every role with its current model, marking any whose model is not in the detected set as needing a choice. Ask whether to accept as-is or change specific roles, offering the detected models as the options. Prefer AskQuestion over free text. For panel roles (how critics, arena runners, architect runners, interrogate reviewers) the value is a list, and one subagent runs per model, so the list length sets the count. Judge seats (arena cross-judge, eval blinded judge, figure-it-out judge) must be a different model family from the generators they score — flag same-family collisions before writing.
+Show every role with its current model, marking any whose model is not in the detected set as needing a choice. Ask whether to accept as-is or change specific roles, offering the detected models as the options. Prefer AskQuestion over free text. For panel roles (how critics, arena runners, architect runners, interrogate reviewers) the value is a list, and one subagent runs per model, so the list length sets the count. `arena cross-judge pool` is also a list, but Arena selects one model from it whose family differs from the parent's when possible. Other judge seats (eval blinded judge, figure-it-out judge) must be a different model family from the generators they score — flag same-family collisions before writing.
 
 ### 4. Validate
 
@@ -49,8 +49,8 @@ why synthesizer: claude-fable-5-medium-thinking
 reflect tooling: composer-2.5-fast
 reflect judgment, divergent, synthesizer: claude-fable-5-medium-thinking
 arena runners: gpt-5.5-high-fast, composer-2.5-fast, grok-4.5-xhigh
+arena cross-judge pool: claude-fable-5-medium-thinking, gpt-5.5-high-fast, composer-2.5-fast
 architect runners: gpt-5.5-high-fast, composer-2.5-fast, grok-4.5-xhigh
-arena cross-judge, eval blinded judge: claude-fable-5-medium-thinking
 interrogate reviewers: claude-fable-5-medium-thinking, gpt-5.5-high-fast, composer-2.5-fast
 figure-it-out delegate: gpt-5.5-high-fast
 figure-it-out judge: claude-fable-5-medium-thinking
