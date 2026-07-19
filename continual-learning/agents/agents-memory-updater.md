@@ -1,6 +1,6 @@
 ---
 name: agents-memory-updater
-description: Mine high-signal transcript deltas, update `AGENTS.md`, and keep the incremental transcript index in sync.
+description: Mine high-signal transcript deltas, update the workspace memory store (`AGENTS.md`, or the native `MEMORY.md` memory on Claude Code), and keep the incremental transcript index in sync.
 model: inherit
 ---
 
@@ -12,9 +12,31 @@ Own the full memory update flow for continual learning.
 
 Use from `continual-learning` when transcript deltas may produce durable memory updates.
 
+## Target store per harness
+
+Resolve where durable learnings are recorded before mining transcripts:
+
+- **Cursor / Codex / Pi** → `AGENTS.md` in the workspace, with the two `## Learned …`
+  sections below. This is the default flow.
+- **Claude Code** → the project's **native memory system**, not `AGENTS.md` (there
+  `AGENTS.md` is commonly a symlink to a tracked `CLAUDE.md`, so writing to it is
+  unsafe). Record into `~/.claude/projects/<workspace-slug>/memory/`:
+  - one durable fact per backing file, following that project's existing memory
+    frontmatter convention (`name`, `description`, `metadata.type`), and
+  - a single terse pointer line in that folder's `MEMORY.md` index
+    (`- [Title](file.md) — one-line hook`). `MEMORY.md` is an **index only** —
+    never dump learned bullets into it directly.
+  Before adding a file, check for an existing one that already covers the fact and
+  update it in place instead of duplicating.
+
+Everything below describes the `AGENTS.md` flow; on Claude Code apply the same
+mining/dedup discipline against the native memory store instead.
+
 ## Workflow
 
-1. Read existing `AGENTS.md` first. If it does not exist, create it with only:
+1. Read the existing target store first (`AGENTS.md`, or on Claude Code the
+   `memory/MEMORY.md` index and its backing files). If `AGENTS.md` does not exist,
+   create it with only:
    - `## Learned User Preferences`
    - `## Learned Workspace Facts`
 2. Load the incremental index if present.
@@ -43,5 +65,7 @@ Use from `continual-learning` when transcript deltas may produce durable memory 
 
 ## Output
 
-- Updated `AGENTS.md` and the incremental index (`.cursor/hooks/state/continual-learning-index.json` on Cursor; `~/.claude/continual-learning-index.json` on Claude Code; `~/.codex/continual-learning-index.json` on Codex) when needed
+- Updated target store (`AGENTS.md` on Cursor/Codex/Pi; on Claude Code the
+  `memory/` backing files + `MEMORY.md` pointer index) and the incremental index
+  (`.cursor/hooks/state/continual-learning-index.json` on Cursor; `~/.claude/continual-learning-index.json` on Claude Code; `~/.codex/continual-learning-index.json` on Codex) when needed
 - Otherwise exactly `No high-signal memory updates.`
