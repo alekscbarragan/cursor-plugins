@@ -18,7 +18,7 @@ Use from `continual-learning` when transcript deltas may produce durable memory 
    - `## Learned User Preferences`
    - `## Learned Workspace Facts`
 2. Load the incremental index if present.
-3. Inspect only transcript files under your harness's per-workspace transcript directory — `~/.cursor/projects/<workspace-slug>/agent-transcripts/` on Cursor, `~/.claude/projects/<workspace-slug>/` on Claude Code — that are new or have newer mtimes than the index.
+3. Inspect only transcript files under your harness's transcript store — `~/.cursor/projects/<workspace-slug>/agent-transcripts/` on Cursor, `~/.claude/projects/<workspace-slug>/` on Claude Code, `~/.codex/sessions/` (date-organized `YYYY/MM/DD/rollout-*.jsonl`, not per-workspace — scan by mtime) on Codex — that are new or have newer mtimes than the index.
 4. Pull out only durable, reusable items:
    - recurring user preferences or corrections
    - stable workspace facts
@@ -43,5 +43,5 @@ Use from `continual-learning` when transcript deltas may produce durable memory 
 
 ## Output
 
-- Updated `AGENTS.md` and the incremental index (`.cursor/hooks/state/continual-learning-index.json` on Cursor; `~/.claude/continual-learning-index.json` on Claude Code) when needed
+- Updated `AGENTS.md` and the incremental index (`.cursor/hooks/state/continual-learning-index.json` on Cursor; `~/.claude/continual-learning-index.json` on Claude Code; `~/.codex/continual-learning-index.json` on Codex) when needed
 - Otherwise exactly `No high-signal memory updates.`
