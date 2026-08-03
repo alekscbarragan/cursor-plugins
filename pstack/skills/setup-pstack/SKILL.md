@@ -56,6 +56,7 @@ architect runners: claude-fable-5-thinking-max, gpt-5.6-sol-max, grok-4.6-fast-x
 interrogate reviewers: claude-fable-5-thinking-max, gpt-5.6-sol-max, grok-4.6-fast-xhigh, claude-opus-5-thinking-xhigh
 figure-it-out delegate: gpt-5.5-high-fast
 figure-it-out judge: claude-fable-5-medium-thinking
+swarm workers: composer-2.5
 ```
 
 Add `# fallback: claude-opus-4-8-thinking-high` on judgment roles; J3 E3 uses `claude-fable-5-low-thinking` per dispatch-rubric overlay. Arena/architect runners exclude the judgment family so the cross-judge seat stays independent.
