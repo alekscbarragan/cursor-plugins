@@ -19,7 +19,7 @@ The default role-to-model mapping is the rule shape shown in step 5 below. If `~
 
 ### 3. Map and confirm
 
-Show every role with its current model, marking any real slug not in the detected set as needing a choice. Ask whether to accept as-is or change specific roles, offering the detected models plus `inherit-parent` and `auto` (both mean: this role runs on the parent chat model, which is how Auto users stay on Auto) as the options. Prefer AskQuestion over free text. For panel roles (how critics, arena runners, architect runners, interrogate reviewers) the value is a list, and one subagent runs per entry, alias entries included, so the list length sets the count. `arena cross-judge pool` is also a list, but Arena selects one value from it whose model family differs from the parent's when possible. `swarm workers` is the default model for every worker unless a race or comparison assigns another model per arm.
+Show every role with its current model, marking any real slug not in the detected set as needing a choice. Ask whether to accept as-is or change specific roles, offering the detected models plus `inherit-parent` and `auto` (both mean: this role runs on the parent chat model, which is how Auto users stay on Auto) as the options. Prefer AskQuestion over free text. For panel roles (how critics, arena runners, architect runners, interrogate reviewers) the value is a list, and one subagent runs per entry, alias entries included, so the list length sets the count. `arena cross-judge pool` is also a list, but Arena selects one value from it whose model family differs from the parent's when possible. `swarm workers` is the default model for every worker unless a race or comparison assigns another model per arm. Other judge seats (eval blinded judge, figure-it-out judge) must be a different model family from the generators they score — flag same-family collisions before writing.
 
 ### 4. Validate
 
@@ -54,11 +54,26 @@ arena cross-judge pool: claude-fable-5-thinking-max, gpt-5.6-sol-max, grok-4.6-f
 swarm workers: grok-4.6-fast-xhigh
 architect runners: claude-fable-5-thinking-max, gpt-5.6-sol-max, grok-4.6-fast-xhigh, claude-opus-5-thinking-xhigh
 interrogate reviewers: claude-fable-5-thinking-max, gpt-5.6-sol-max, grok-4.6-fast-xhigh, claude-opus-5-thinking-xhigh
+figure-it-out delegate: gpt-5.5-high-fast
+figure-it-out judge: claude-fable-5-medium-thinking
 ```
+
+Add `# fallback: claude-opus-4-8-thinking-high` on judgment roles; J3 E3 uses `claude-fable-5-low-thinking` per dispatch-rubric overlay. Arena/architect runners exclude the judgment family so the cross-judge seat stays independent.
 
 ### 6. Confirm
 
 Tell the user the rule was written and that it applies to new sessions. Re-running this skill updates it.
+
+## Per-runtime siblings
+
+This skill configures the Cursor rule only. The same role labels ship as per-runtime projections of the `dispatch-rubric-v2.md` role matrix (see its "pstack role crosswalk"), installed by `~/.ai/setup.sh`:
+
+- `~/.ai/rules/pstack-models-cc.md` — Claude Code, always-on via `~/.claude/rules/` (models `sonnet`/`opus`/`fable`; effort via `cc-agent-*` bins)
+- `~/.ai/rules/pstack-models-codex.md` — Codex, managed marker block in `~/.codex/AGENTS.md` (gpt-5.6-sol, roles differ by reasoning effort)
+- `~/.ai/rules/pstack-models-relays.md` — on-demand, kokoro-mode "with relays" override (cross-provider relay seats)
+- `~/.ai/cursor/pstack-models.mdc` — the tracked template behind `~/.cursor/rules/pstack-models.mdc`
+
+**Write-back rule:** `setup.sh` regenerates `~/.cursor/rules/pstack-models.mdc` from the `~/.ai` template on every run. After step 5, copy the written rule back to `~/.ai/cursor/pstack-models.mdc` (when that repo exists on the machine) — otherwise the next `setup.sh` run reverts your choices. When a change reflects a policy shift rather than slug availability, update the matrix and the sibling tables together.
 
 ### 7. Offer a verification skill (optional)
 
