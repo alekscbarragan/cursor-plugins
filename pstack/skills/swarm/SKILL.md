@@ -42,7 +42,7 @@ Fan out is done when N workers have started, or N-1 plus a named dropout.
 
 ## Phase C: Aggregate
 
-Read the result files, not pane scrollback. Drop a result that does not record the SHAs and method its brief names, and rerun that worker once. After a second miss, record a gap. A gap does not count as a pass. For coverage, every required slice needs a result. For a race, apply the selection rule declared in Frame. Use first pass, rank all, or best-of. Quote evidence. Do not paste raw worker dumps.
+Read the result files, not pane scrollback. Drop a result that does not record the SHAs and method its brief names, and respawn that worker once. After a second miss, record a gap. A gap does not count as a pass. For coverage, every required slice needs a result. For a race, apply the selection rule declared in Frame. Use first pass, rank all, or best-of. Quote evidence. Do not paste raw worker dumps.
 
 Keep a compact result table, one-line evidenced issues, and named gaps or dropouts.
 
