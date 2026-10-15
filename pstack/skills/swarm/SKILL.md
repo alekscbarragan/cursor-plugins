@@ -5,8 +5,6 @@ description: "Swarm N workers on herdr, drain them, return one report. Use for /
 
 # Swarm
 
-Fan out N parallel workers. Cover separate slices, race the same brief, or mix both. The parent waits, aggregates, and returns one report.
-
 ## Open the phase list
 
 Open a todolist with one entry per phase before launching anything.
@@ -20,7 +18,6 @@ Open a todolist with one entry per phase before launching anything.
 
 1. State the done predicate and the artifact or report the swarm must return.
 2. Choose the shape: slices, a race on identical briefs, or a mix. For a race or a mix, declare `first pass`, `rank all`, or `best-of` before you launch.
-3. Set N from the user, or derive N from the shape. N is the worker count, not a host concurrency cap.
 4. Pick the worker model from the `swarm workers` line in this host's pstack-models file. Cursor: `~/.cursor/rules/pstack-models.mdc`. Claude Code: `~/.ai/rules/pstack-models-cc.md`. Codex: the pstack-models marker in `~/.codex/AGENTS.md`. If the rule or that line is missing, use `grok-4.7-xhigh-fast`. For `auto` or `inherit-parent`, omit `model` so the workers run on the parent model. If the launcher rejects a slug, use the default and say so. If it rejects the default, use the closest valid slug of the same family from its error message. For a model race, name each arm's model up front. Pick each subagent's reasoning level and fast or standard speed for the job, per the Subagents section of the **poteto-mode** skill.
 5. Give each worker its own writable output when it writes. Use a worktree, a branch, or `/tmp/swarm-<slug>/worker-<n>/`. When workers verify or measure commits, each brief names the exact SHAs. A measurement brief also names the method (sample count, what one sample is, order). The worker records both in its result.
 
@@ -43,8 +40,6 @@ Fan out is done when N workers have started, or N-1 plus a named dropout.
 ## Phase C: Aggregate
 
 Read the result files, not pane scrollback. Drop a result that does not record the SHAs and method its brief names, and respawn that worker once. After a second miss, record a gap. A gap does not count as a pass. For coverage, every required slice needs a result. For a race, apply the selection rule declared in Frame. Use first pass, rank all, or best-of. Quote evidence. Do not paste raw worker dumps.
-
-Keep a compact result table, one-line evidenced issues, and named gaps or dropouts.
 
 Aggregate is done when every required slice has a row, or the race rule has a winner, and dropouts are named.
 
