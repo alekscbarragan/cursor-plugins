@@ -1,6 +1,7 @@
 ---
 name: swarm
 description: "Swarm N workers on herdr, drain them, return one report. Use for /swarm, 'swarm this', coverage slices, races, or gauntlets."
+disable-model-invocation: true
 ---
 
 # Swarm
