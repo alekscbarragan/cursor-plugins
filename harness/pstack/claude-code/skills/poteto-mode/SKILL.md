@@ -27,7 +27,7 @@ Remaining triggers:
 - Nontrivial multi-step → write the throughput checkpoint (Feature step 3).
 - Any prose surface, your reply to the user included → the **unslop** skill. Write the reply per **Writing the reply**. Agent-facing prose also follows the **create-skill** skill (Cursor's built-in for authoring SKILL.md files).
 - Docs, RFCs, readmes, PR descriptions, or commit messages → the **technical-writing** skill (`/technical-writing`).
-- Before commit → the `deslop` skill from the `cursor-team-kit` plugin (`/deslop`).
+- Before commit → the **deslopme** skill (`/deslopme`).
 - Before review → the **no-comments** skill (`/no-comments`).
 - Shipping UI / IDE / CLI → the matching control skill. `cursor-team-kit` publishes `control-cli` (CLIs and TUIs) and `control-ui` (browser / Electron / web UIs). For bug fixes, reproduce first on the same surface yourself. Hand to the user only under the narrow Bug fix step 1 exception.
 - Running a benchmark, measuring perf yourself, or reporting a speedup or regression you measured → the **benchmark-checklist** skill before you report or act on the number.
@@ -149,3 +149,7 @@ A large or cross-cutting effort (a migration across many call sites, an ambitiou
 - **Multi-phase or multi-PR plan.** Work that spans phases or stacked PRs. File: `playbooks/multi-phase-plan.md`.
 - **Worktree and simulator cleanup.** Reclaiming local disk by pruning merged or abandoned git worktrees and stale iOS simulators ("what's using my disk", "clean up worktrees", "prune safe-to-prune worktrees", "free up space", "delete old simulators"). File: `playbooks/worktree-cleanup.md`.
 - **Opening a PR.** Invoked at the end of every other playbook.
+
+## History
+
+See [CHANGELOG.md](CHANGELOG.md).

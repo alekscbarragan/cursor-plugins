@@ -30,7 +30,7 @@ The default role-to-model mapping is the rule shape shown in step 5 below. If `~
 
 **(b) Apply it.** Build the working table from the skill defaults, and on a re-run keep any role you changed by family, list, or alias (`inherit-parent`, `auto`). `unlimited`, `large`, `medium`, and `small` set the effort token of every real slug, panel entries included, to `max`, `xhigh`, `high`, or `medium`. The effort token is the last token, or the one before a trailing `fast`, on the ladder `max` > `xhigh` > `high` > `medium` > `low`. If the result is not a detected slug, use the same family's detected slug with the highest effort at or below the target, else mark the role as needing a choice. `inherit-parent` and `auto` do not change. So `unlimited` turns `claude-opus-5-5-xhigh` into `claude-opus-5-5-max`. Grok slugs top out at `xhigh`, so under `unlimited` the fallback puts Grok at `xhigh` and keeps `grok-4.7-xhigh-fast` as it is. `large` keeps both defaults. `small` turns them into `claude-opus-5-5-medium` and `grok-4.7-medium-fast`.
 
-**(c) Show the roles and confirm.** Show every role with its model, marking any real slug not in the detected set as needing a choice. Also list each line step 2 dropped. Ask whether to accept as-is or change specific roles, offering the detected models plus `inherit-parent` and `auto` (both mean: this role runs on the parent chat model, which is how Auto users stay on Auto) as the options. Prefer AskQuestion over free text. For panel roles (arena runners, architect runners, interrogate reviewers) the value is a list, and one subagent runs per entry, alias entries included, so the list length sets the count. `arena cross-judge pool` is also a list, but Arena selects one value from it whose model family differs from the parent's when possible. `swarm workers` is the default model for every worker unless a race or comparison assigns another model per arm.
+**(c) Show the roles and confirm.** Show every role with its model, marking any real slug not in the detected set as needing a choice. Also list each line step 2 dropped. Ask whether to accept as-is or change specific roles, offering the detected models plus `inherit-parent` and `auto` (both mean: this role runs on the parent chat model, which is how Auto users stay on Auto) as the options. Prefer AskQuestion over free text. For panel roles (arena runners, architect runners, interrogate reviewers) the value is a list, and one subagent runs per entry, alias entries included, so the list length sets the count. `arena cross-judge pool` is also a list, but Arena selects one value from it whose model family differs from the parent's when possible. `swarm workers` is the default model for every worker unless a race or comparison assigns another model per arm. Other judge seats (eval blinded judge, figure-it-out judge) must be a different model family from the generators they score — flag same-family collisions before writing.
 
 ### 4. Validate
 
@@ -63,9 +63,22 @@ reflect judgment, divergent, synthesizer: claude-opus-5-5-xhigh
 arena runners: claude-opus-5-5-xhigh, grok-4.7-xhigh-fast
 arena cross-judge pool: claude-opus-5-5-xhigh, grok-4.7-xhigh-fast
 swarm workers: grok-4.7-xhigh-fast
-architect runners: claude-opus-5-5-xhigh, grok-4.7-xhigh-fast
-interrogate reviewers: claude-opus-5-5-xhigh, grok-4.7-xhigh-fast
+architect runners: claude-opus-5-5-max, gpt-5.6-sol-max, grok-4.7-xhigh-fast
+interrogate reviewers: claude-opus-5-5-max, gpt-5.6-sol-max, grok-4.7-xhigh-fast
+figure-it-out delegate: grok-4.7-xhigh
+figure-it-out judge: grok-4.7-high
 ```
+
+## Per-runtime siblings
+
+This skill configures the Cursor rule only. The same role labels ship as per-runtime projections of the `dispatch-rubric-v2.md` role matrix (see its "pstack role crosswalk"), installed by `~/.ai/setup.sh`:
+
+- `~/.ai/rules/pstack-models-cc.md` — Claude Code, always-on via `~/.claude/rules/` (models `sonnet`/`opus`/`fable`; effort via `cc-agent-*` bins)
+- `~/.ai/rules/pstack-models-codex.md` — Codex, managed marker block in `~/.codex/AGENTS.md` (gpt-5.6-sol, roles differ by reasoning effort)
+- `~/.ai/rules/pstack-models-relays.md` — on-demand, kokoro-mode "with relays" override (cross-provider relay seats)
+- `~/.ai/cursor/pstack-models.mdc` — the tracked template behind `~/.cursor/rules/pstack-models.mdc`
+
+**Write-back rule:** `setup.sh` regenerates `~/.cursor/rules/pstack-models.mdc` from the `~/.ai` template on every run. After step 5, copy the written rule back to `~/.ai/cursor/pstack-models.mdc` (when that repo exists on the machine) — otherwise the next `setup.sh` run reverts your choices. When a change reflects a policy shift rather than slug availability, update the matrix and the sibling tables together.
 
 ### 6. Confirm
 

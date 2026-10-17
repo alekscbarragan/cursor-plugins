@@ -92,39 +92,40 @@ for (const entry of marketplace.plugins ?? []) {
   }
 }
 
-const claudeMarketplacePath = resolve(root, ".claude-plugin/marketplace.json");
-const claudeMarketplace = existsSync(claudeMarketplacePath)
-  ? loadJSON(claudeMarketplacePath)
-  : { plugins: [] };
+const harnessMarketplaces = [".claude-plugin", ".agents/plugins"].map((directory) => {
+  const path = resolve(root, directory, "marketplace.json");
+  return {
+    marketplace: existsSync(path) ? loadJSON(path) : { plugins: [] },
+    manifest: directory === ".claude-plugin" ? ".claude-plugin/plugin.json" : ".codex-plugin/plugin.json",
+  };
+});
 
-for (const entry of claudeMarketplace.plugins ?? []) {
-  const pluginDir = resolve(root, entry.source);
-  const pluginJsonPath = resolve(pluginDir, ".claude-plugin/plugin.json");
+for (const { marketplace, manifest } of harnessMarketplaces) {
+  for (const entry of marketplace.plugins ?? []) {
+    const pluginJsonPath = resolve(root, entry.source, manifest);
 
-  if (!existsSync(pluginJsonPath)) {
-    fail(
-      `Plugin "${entry.name}": missing .claude-plugin/plugin.json in "${entry.source}"`
-    );
-    continue;
-  }
+    if (!existsSync(pluginJsonPath)) {
+      fail(`Plugin "${entry.name}": missing ${manifest} in "${entry.source}"`);
+      continue;
+    }
 
-  const pluginJson = loadJSON(pluginJsonPath);
-  if (pluginJson.name && pluginJson.name !== entry.name) {
-    fail(
-      `Plugin "${entry.name}": Claude marketplace name does not match .claude-plugin/plugin.json name "${pluginJson.name}"`
-    );
+    const pluginJson = loadJSON(pluginJsonPath);
+    if (pluginJson.name && pluginJson.name !== entry.name) {
+      fail(`Plugin "${entry.name}": marketplace name does not match ${manifest} name "${pluginJson.name}"`);
+    }
   }
 }
 
 const manifestPaths = [
   ".cursor-plugin/plugin.json",
   ".claude-plugin/plugin.json",
+  ".codex-plugin/plugin.json",
   "plugin.json",
 ];
 const sources = new Map();
 for (const entry of [
   ...(marketplace.plugins ?? []),
-  ...(claudeMarketplace.plugins ?? []),
+  ...harnessMarketplaces.flatMap(({ marketplace }) => marketplace.plugins ?? []),
 ]) {
   sources.set(resolve(root, entry.source), entry.name);
 }

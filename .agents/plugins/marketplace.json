@@ -1,0 +1,9 @@
+{
+  "name": "cursor-plugins",
+  "plugins": [
+    {
+      "name": "pstack",
+      "source": "./harness/pstack/codex"
+    }
+  ]
+}
